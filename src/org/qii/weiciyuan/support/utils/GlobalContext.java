@@ -14,6 +14,9 @@ import org.qii.weiciyuan.support.database.AccountDBTask;
 import org.qii.weiciyuan.support.database.GroupDBTask;
 import org.qii.weiciyuan.support.settinghelper.SettingUtility;
 import org.qii.weiciyuan.support.smileypicker.SmileyMap;
+import org.qii.weiciyuan.support.database.DatabaseManager;
+import org.qii.weiciyuan.support.file.FileLocationMethod;
+import org.qii.weiciyuan.support.file.FileManager;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -28,6 +31,8 @@ import android.util.DisplayMetrics;
 import android.util.LruCache;
 import android.view.Display;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -242,11 +247,50 @@ public final class GlobalContext extends Application {
         }
     }
 
+    public synchronized Map<String, Bitmap> getExtraPics() {
+        if (emotionsPic != null && emotionsPic.size() > 0) {
+            return emotionsPic.get(SmileyMap.EXTRA_EMOTION_POSITION);
+        } else {
+            getEmotionsTask();
+            return emotionsPic.get(SmileyMap.EXTRA_EMOTION_POSITION);
+        }
+    }
+
+    public LinkedHashMap<String, Bitmap> getExtraEmotionMap(){
+        Map<String, String> textUrlMap = DatabaseManager.getInstance().getEmotionsMap();
+        LinkedHashMap<String, Bitmap> bitmapMap = new LinkedHashMap<String, Bitmap>();
+
+        for (String str : textUrlMap.keySet()){
+            String url = textUrlMap.get(str);
+            String path = FileManager.getFilePathFromUrl(url, FileLocationMethod.emotion);
+            try {
+                FileInputStream inputStream = new FileInputStream(new File(path));
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                if (bitmap != null) {
+                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap,
+                            Utility.dip2px(getResources().getInteger(R.integer.emotion_size)),
+                            Utility.dip2px(getResources().getInteger(R.integer.emotion_size)),
+                            true);
+                    if (bitmap != scaledBitmap) {
+                        bitmap.recycle();
+                        bitmap = scaledBitmap;
+                    }
+                    bitmapMap.put(str, bitmap);
+                }
+            } catch (IOException ignored) {
+                //e.printStackTrace();
+            }
+        }
+        return bitmapMap;
+    }
+
     private void getEmotionsTask() {
         Map<String, String> general = SmileyMap.getInstance().getGeneral();
         emotionsPic.put(SmileyMap.GENERAL_EMOTION_POSITION, getEmotionsTask(general));
         Map<String, String> huahua = SmileyMap.getInstance().getHuahua();
         emotionsPic.put(SmileyMap.HUAHUA_EMOTION_POSITION, getEmotionsTask(huahua));
+
+        emotionsPic.put(SmileyMap.EXTRA_EMOTION_POSITION, getExtraEmotionMap());
     }
 
     private LinkedHashMap<String, Bitmap> getEmotionsTask(Map<String, String> emotionMap) {

@@ -241,6 +241,7 @@
                 android:name=".othercomponent.unreadnotification.JBCommentsToMeNotificationServiceHelper"/>
         <service android:name=".othercomponent.unreadnotification.BigTextNotificationService"/>
         <service android:name=".othercomponent.unreadnotification.SimpleTextNotificationService"/>
+        <service android:name=".othercomponent.DownloadEmotionsService"/>
 
         <!---broadcast receiver -->
         <!--<receiver-->

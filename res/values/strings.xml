@@ -42,6 +42,7 @@
     <!--emotions-->
     <string name="weibo_emotions">微博表情</string>
     <string name="download_emotions">下载表情</string>
+    <string name="download_emotions_summary">只有下载了表情你才能在时间线上看到，表情总计有几千张，不过都很小</string>
     <string name="background_downloading">后台下载中</string>
 
     <!-- listview-->

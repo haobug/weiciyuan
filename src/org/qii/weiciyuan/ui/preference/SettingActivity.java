@@ -78,6 +78,7 @@ public class SettingActivity extends AbstractAppActivity {
     public static final String AUTHOR = "pref_author_key";
     public static final String DEBUG_MEM_INFO = "pref_mem_key";
     public static final String CRASH = "pref_crash_key";
+    public static final String DOWNLOAD_EMOTIONS = "download_emotions";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

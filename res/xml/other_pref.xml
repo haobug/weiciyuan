@@ -21,6 +21,10 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_cache_title">
 
+        <Preference android:title="@string/download_emotions"
+            android:summary="@string/download_emotions_summary"
+            android:key="download_emotions"
+            />
         <Preference
                 android:key="click_to_clean_cache"
                 android:summary="@string/getting_cache_size"

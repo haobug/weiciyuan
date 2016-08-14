@@ -79,7 +79,7 @@ public class DownloadEmotionsService extends Service {
                 List<EmotionBean> needList = new ArrayList<EmotionBean>();
 
                 for (EmotionBean bean : list) {
-                    if (TextUtils.isEmpty(bean.getCategory())) {
+                    if (!TextUtils.isEmpty(bean.getCategory())) {
                         needList.add(bean);
                     }
                 }

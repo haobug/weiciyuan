@@ -301,16 +301,22 @@ public class TimeLineUtility {
             String str2 = localMatcher.group(0);
             int k = localMatcher.start();
             int m = localMatcher.end();
-            if (m - k < 8) {
+            /*if (m - k < 8)  "[哆啦A梦花心]".length == 8 */ {
                 Bitmap bitmap = GlobalContext.getInstance().getEmotionsPics().get(str2);
                 if (bitmap == null) {
                     bitmap = GlobalContext.getInstance().getHuahuaPics().get(str2);
+                }
+                if (bitmap == null) {
+                    bitmap = GlobalContext.getInstance().getExtraPics().get(str2);
                 }
                 if (bitmap != null) {
                     ImageSpan localImageSpan = new ImageSpan(
                             GlobalContext.getInstance().getActivity(), bitmap,
                             ImageSpan.ALIGN_BASELINE);
                     value.setSpan(localImageSpan, k, m, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+                else {
+                    android.util.Log.e("smiley", String.format("notfound: %s", str2));
                 }
             }
         }

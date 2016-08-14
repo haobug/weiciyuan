@@ -14,6 +14,9 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.view.MenuItem;
 import android.widget.Toast;
+import android.preference.Preference.OnPreferenceClickListener;
+import org.qii.weiciyuan.othercomponent.DownloadEmotionsService;
+import org.qii.weiciyuan.support.utils.GlobalContext;
 
 /**
  * User: qii
@@ -83,7 +86,16 @@ public class OtherActivity extends AbstractAppActivity {
                             return true;
                         }
                     });
-
+            findPreference(SettingActivity.DOWNLOAD_EMOTIONS)
+                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+				@Override
+				public boolean onPreferenceClick(Preference preference) {
+					Intent service = new Intent(getActivity(), DownloadEmotionsService.class);
+					service.putExtra("token", GlobalContext.getInstance().getSpecialToken());
+					getActivity().startService(service);
+					return true;
+				}
+			});
             detectDebugPreference();
         }
 

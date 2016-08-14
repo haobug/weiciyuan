@@ -33,6 +33,8 @@ public class FileManager {
     private static final String WEBVIEW_FAVICON = "favicon";
     private static final String LOG = "log";
     private static final String WEICIYUAN = "weiciyuan";
+    private static final String SDCARD_PATH = GlobalContext.getInstance().getExternalCacheDir().getAbsolutePath();
+    private static final String EMOTION = "emotion";
 
     /**
      * install weiciyuan, open app and login in, Android system will create cache dir.
@@ -141,6 +143,24 @@ public class FileManager {
         }
     }
 
+    private static String getFileRelativePathFromUrl(String url) {
+        //AppLogger.d(url);
+        int index = url.indexOf("//");
+
+        String s = url.substring(index + 2);
+
+        String result = s.substring(s.indexOf("/"));
+
+
+        return result;
+    }
+
+    private static String getFileAbsolutePathFromRelativePath(String relativePath) {
+        String result = SDCARD_PATH + File.separator + relativePath;
+
+        return result;
+    }
+
     public static String getFilePathFromUrl(String url, FileLocationMethod method) {
 
         if (!isExternalStorageMounted()) {
@@ -149,6 +169,17 @@ public class FileManager {
 
         if (TextUtils.isEmpty(url)) {
             return "";
+        }
+        switch(method){
+            case emotion:
+                String oldRelativePath = getFileRelativePathFromUrl(url);
+                String newRelativePath = "";
+                String name = new File(oldRelativePath).getName();
+                newRelativePath = File.separator + EMOTION + File.separator + name;
+                String absolutePath = getFileAbsolutePathFromRelativePath(newRelativePath);
+                return absolutePath;
+            default:
+                break;
         }
 
         return DownloadPicturesDBTask.get(url);
